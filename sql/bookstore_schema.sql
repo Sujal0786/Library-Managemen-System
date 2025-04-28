@@ -1,0 +1,21 @@
+-- bookstore_schema.sql
+CREATE DATABASE IF NOT EXISTS BookStoreDB;
+USE BookStoreDB;
+CREATE TABLE IF NOT EXISTS Admin (
+    admin_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL
+);
+CREATE TABLE IF NOT EXISTS Books (
+    book_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    author VARCHAR(100),
+    price DECIMAL(8, 2),
+    quantity INT
+);
+CREATE TABLE IF NOT EXISTS Staff (
+    staff_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    role VARCHAR(50),
+    contact VARCHAR(50)
+);
