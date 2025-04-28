@@ -25,7 +25,7 @@ Go to the project directory
 Compile Project
 
 ```bash
-javac LibrarySystem.java Book.java Staff.java User.java
+javac LibrarySystem.java
 
 ```
 
