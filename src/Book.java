@@ -1,9 +1,8 @@
-import java.util.ArrayList;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.sql.*;
+import java.util.*;
 public class Book {
     private int bookId;
     private String title;
@@ -26,20 +25,37 @@ public class Book {
             String query = "SELECT * FROM Books";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
+            JFrame frame = new JFrame("Available Books");
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setSize(700, 400);
+
+            DefaultTableModel model = new DefaultTableModel();
+            JTable table = new JTable(model);
+
+            model.addColumn("Book ID");
+            model.addColumn("Title");
+            model.addColumn("Author");
+            model.addColumn("Price");
+            model.addColumn("Quantity");
 
             bookTitles.clear();
-            System.out.println("\n--- Books Available ---");
             while (rs.next()) {
+                int id = rs.getInt("book_id");
                 String title = rs.getString("title");
+                String author = rs.getString("author");
+                double price = rs.getDouble("price");
+                int quantity = rs.getInt("quantity");
+
                 bookTitles.add(title);
-                System.out.printf("%d | %s | %s | %.2f | Qty: %d\n",
-                        rs.getInt("book_id"), title,
-                        rs.getString("author"), rs.getDouble("price"),
-                        rs.getInt("quantity"));
-                System.out.println();
+                model.addRow(new Object[] { id, title, author, price, quantity });
             }
+
+            JScrollPane scrollPane = new JScrollPane(table);
+            frame.add(scrollPane, BorderLayout.CENTER);
+            frame.setVisible(true);
+
         } catch (SQLException e) {
-            System.out.println("Error fetching books: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error fetching books: " + e.getMessage());
         }
     }
 

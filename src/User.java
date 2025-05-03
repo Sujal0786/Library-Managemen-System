@@ -1,8 +1,8 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
+import java.sql.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 public class User {
     private String username;
     private String password;
@@ -48,15 +48,38 @@ public class User {
         }
     }
     public void ShowUser() {
-        try (Connection conn = DBConnection.getConnection()) {
-            String query = "SELECT * FROM Admin";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                System.out.println("Username: " + rs.getString("username"));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error retrieving users: " + e.getMessage());
+    try (Connection conn = DBConnection.getConnection()) {
+        String query = "SELECT * FROM Admin";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        ResultSet rs = stmt.executeQuery();
+
+       
+        JFrame frame = new JFrame("Admin Users");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(500, 300);
+
+        DefaultTableModel model = new DefaultTableModel();
+        JTable table = new JTable(model);
+
+        model.addColumn("Admin ID");
+        model.addColumn("Username");
+        model.addColumn("Password"); 
+
+        while (rs.next()) {
+            int id = rs.getInt("admin_id");           
+            String username = rs.getString("username");
+            String password = rs.getString("password"); 
+
+            model.addRow(new Object[]{id, username, password}); 
         }
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        frame.add(scrollPane, BorderLayout.CENTER);
+        frame.setVisible(true);
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error retrieving users: " + e.getMessage());
     }
+}
+
 }

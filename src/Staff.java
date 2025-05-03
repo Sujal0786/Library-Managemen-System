@@ -1,10 +1,8 @@
-import java.sql.Connection;
-import java.util.HashMap;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.sql.*;
+import java.util.*;
 public class Staff {
     private int staffId;
     private String name;
@@ -26,16 +24,40 @@ public class Staff {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
+            // Create JFrame
+            JFrame frame = new JFrame("Staff Details");
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setSize(600, 400);
+
+            // Table model
+            DefaultTableModel model = new DefaultTableModel();
+            JTable table = new JTable(model);
+
+            // Add column names
+            model.addColumn("Staff ID");
+            model.addColumn("Name");
+            model.addColumn("Role");
+            model.addColumn("Contact");
+
+            // Clear map and populate data
             staffMap.clear();
-            System.out.println("\n--- Staff Details ---");
             while (rs.next()) {
                 int id = rs.getInt("staff_id");
                 String name = rs.getString("name");
+                String role = rs.getString("role");
+                String contact = rs.getString("contact");
+
                 staffMap.put(id, name);
-                System.out.printf("%d | %s | %s | %s\n", id, name, rs.getString("role"), rs.getString("contact"));
+                model.addRow(new Object[]{id, name, role, contact});
             }
+
+            // Scroll pane and add to frame
+            JScrollPane scrollPane = new JScrollPane(table);
+            frame.add(scrollPane, BorderLayout.CENTER);
+            frame.setVisible(true);
+
         } catch (SQLException e) {
-            System.out.println("Error fetching staff: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error fetching staff: " + e.getMessage());
         }
     }
 

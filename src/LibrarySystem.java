@@ -1,13 +1,10 @@
-import java.util.Scanner;
-import java.util.Stack;
-
+import java.util.*;
 public class LibrarySystem {
     private static Scanner scanner = new Scanner(System.in);
     private static Stack<String> recentActions = new Stack<>();
 
     public static void main(String[] args) {
-        System.out.println("Welcome to the Bookstore Console App!\n");
-
+        System.out.println("Welcome to the Bookstore Console App!");
         while (true) {
             System.out.println("1. Login");
             System.out.println("2. View Books");
@@ -20,6 +17,7 @@ public class LibrarySystem {
             System.out.println("9. History");
             System.out.println("10. Exit");
             System.out.println("11 .New User");
+            System.out.println("12 .Show User");
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();
@@ -59,10 +57,17 @@ public class LibrarySystem {
                 case 11:
                     addUser();
                     break;
+                case 12:
+                 showUser();
+                    break;    
                 default:
                     System.out.println("Invalid option. Try again.");
             }
         }
+    }
+    private static void showUser() {
+        User user = new User(null, null);
+        user.ShowUser();
     }
 
     private static void showRecentActions() {
